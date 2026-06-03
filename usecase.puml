@@ -6,7 +6,6 @@ actor "Гость" as Guest
 actor "Зареєстрований користувач" as User
 actor "Адміністратор" as Admin
 
-' Наследование: зарегистрированный юзер умеет все, что и гость
 User --|> Guest
 
 rectangle "Система Empathix" {
@@ -18,7 +17,6 @@ rectangle "Система Empathix" {
   usecase "Перегляд історії генерацій" as UC_History
   usecase "Модерація системних промптів" as UC_Admin
   
-  ' Связи include и extend по методичке
   UC_Gen ..> UC_Tone : <<include>>
   UC_Limit ..> UC_Gen : <<extend>>
 }
