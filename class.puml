@@ -1,0 +1,52 @@
+@startuml
+title Діаграма класів системи Empathix 
+left to right direction
+
+abstract class User {
+    + int id
+    + string ipAddress
+    + login()
+}
+
+class Guest {
+    + int dailyGenerationsCount
+    + bool checkLimit()
+    + incrementLimit()
+}
+
+class RegisteredUser {
+    + string email
+    + string passwordHash
+    + List<string> customPrompts
+    + savePrompt(string prompt)
+    + viewHistory()
+}
+
+class Admin {
+    + string adminToken
+    + manageSystemPrompts()
+}
+
+class GenerationSession {
+    + int sessionId
+    + string originalText
+    + string selectedTone
+    + string generatedText
+    + createSession()
+}
+
+class AIClient {
+    + string apiKey
+    + string apiUrl
+    + sendRequest(string text, string tone): string
+}
+
+' Зв'язки наслідування
+User <|-- Guest
+User <|-- RegisteredUser
+User <|-- Admin
+
+' Зв'язки асоціації та композиції з кратністю (multiplicity)
+User "1" *-- "0..*" GenerationSession : створює
+GenerationSession "1" --> "1" AIClient : запитує
+@enduml

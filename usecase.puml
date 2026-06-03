@@ -1,0 +1,32 @@
+@startuml
+title Діаграма прецедентів системи Empathix 
+left to right direction
+
+actor "Гость" as Guest
+actor "Зареєстрований користувач" as User
+actor "Адміністратор" as Admin
+
+' Наследование: зарегистрированный юзер умеет все, что и гость
+User --|> Guest
+
+rectangle "Система Empathix" {
+  usecase "Введення вихідного тексту" as UC_Input
+  usecase "Вибір емпатичного тону" as UC_Tone
+  usecase "Генерація тексту через ШІ" as UC_Gen
+  usecase "Копіювання результату" as UC_Copy
+  usecase "Перевірка добового ліміту" as UC_Limit
+  usecase "Перегляд історії генерацій" as UC_History
+  usecase "Модерація системних промптів" as UC_Admin
+  
+  ' Связи include и extend по методичке
+  UC_Gen ..> UC_Tone : <<include>>
+  UC_Limit ..> UC_Gen : <<extend>>
+}
+
+Guest --> UC_Input
+Guest --> UC_Gen
+Guest --> UC_Copy
+
+User --> UC_History
+Admin --> UC_Admin
+@enduml

@@ -1,0 +1,35 @@
+@startuml
+title Діаграма послідовності: Текстова генерація Гостем (Empathix)
+
+autonumber
+actor "Гость" as Guest
+participant "WebUI (Frontend)" as UI
+participant "BackendController" as BC
+participant "AIClient" as AI
+database "OpenAI API" as API
+
+Guest -> UI: Введення тексту та вибір тону
+activate UI
+UI -> BC: generateTextRequest(text, tone)
+activate BC
+
+BC -> BC: checkGuestLimit()
+alt ліміт < 5 запросів
+    BC -> AI: requestGeneration(text, tone)
+    activate AI
+    AI -> API: POST /v1/chat/completions (prompt)
+    activate API
+    API --> AI: HTTP 200 OK (generated text)
+    deactivate API
+    AI --> BC: Повернення згенерованого тексту
+    deactivate AI
+    BC -> BC: incrementLimit()
+    BC --> UI: success(generatedText)
+else ліміт >= 5 (перевищено добовий ліміт)
+    BC --> UI: error("Перевищено ліміт генерацій для гостей")
+end
+deactivate BC
+
+UI --> Guest: Відображення результату або повідомлення про помилку
+deactivate UI
+@enduml
