@@ -41,12 +41,11 @@ class AIClient {
     + sendRequest(string text, string tone): string
 }
 
-' Зв'язки наслідування
+
 User <|-- Guest
 User <|-- RegisteredUser
 User <|-- Admin
 
-' Зв'язки асоціації та композиції з кратністю (multiplicity)
 User "1" *-- "0..*" GenerationSession : створює
 GenerationSession "1" --> "1" AIClient : запитує
 @enduml
